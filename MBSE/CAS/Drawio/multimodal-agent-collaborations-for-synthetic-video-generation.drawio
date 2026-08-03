@@ -1,0 +1,34 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
+  <diagram name="kubrick-framework-and-generated-video-screenshots" id="ShVVFRJ6PCWhWUNj0p3n">
+    <mxGraphModel dx="1111" dy="537" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="pLlXqR9pQ5yRta56GLkK-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="720" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="pLlXqR9pQ5yRta56GLkK-2" value="Visual Self-Improving" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="120" y="160" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pLlXqR9pQ5yRta56GLkK-3" value="VLLM Reviewer" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="210" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pLlXqR9pQ5yRta56GLkK-4" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="400" width="720" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="pLlXqR9pQ5yRta56GLkK-5" value="Collaborative Generation" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="120" y="400" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pLlXqR9pQ5yRta56GLkK-6" value="LLM Programmer" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="455" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pLlXqR9pQ5yRta56GLkK-7" value="" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="pLlXqR9pQ5yRta56GLkK-3" target="pLlXqR9pQ5yRta56GLkK-6">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="330" y="410" as="sourcePoint" />
+            <mxPoint x="490" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
