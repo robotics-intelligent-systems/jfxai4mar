@@ -2,6 +2,10 @@
 
 ## AI-Powered Augmented Reality, Spatial Computing, Computer Vision & Digital Twin Platform
 
+**Application focus: AI Healthcare, Security and Defense — modular XR research, training, inspection and human-supervised decision support.**
+
+The expanded compendium integrates [HoloLensForCV](https://github.com/sdk2035/HoloLensForCV) for device-specific sensor acquisition and computer-vision research, and [MixedRealityToolkit-Unity](https://github.com/sdk2035/MixedRealityToolkit-Unity) for an optional Unity spatial-interaction client. These are proposed adapters, not a claim of an implemented or validated combined system. See [the integration compendium](#153-hololensforcv-and-mrtk-integration-compendium) for compatibility, interfaces and delivery milestones.
+
 > **Repository:** `robotics-intelligent-systems/jfxai4mar`
 >
 > **Purpose:** reorganize the current JFXAI4MAR software compendium into a modular, open-source-first architecture for augmented reality, mixed reality, spatial computing, computer vision, visual-inertial tracking, local AI, 3D content generation, simulation, digital twins, geospatial visualization, embedded devices and AI-assisted engineering.
@@ -25,6 +29,8 @@ and references a heterogeneous ecosystem including:
 - Comfy Desktop / ComfyUI;
 - openmicro Codex desktop application;
 - OpenVR;
+- HoloLensForCV sensor acquisition, streaming and recording;
+- MixedRealityToolkit-Unity spatial interaction and UI;
 - opentrack;
 - Maritime Autonomous Vehicle Monitoring and Response Framework (MAVMRF);
 - Roboflow;
@@ -206,6 +212,8 @@ Vendor/platform-specific integration
 | Comfy Desktop / ComfyUI | Generative AI workflow | AI Tool / Core Candidate |
 | openmicro Codex desktop | AI coding / desktop workflow | Optional AI Tool |
 | OpenVR | XR runtime/API | Legacy / Optional Adapter |
+| [HoloLensForCV](https://github.com/sdk2035/HoloLensForCV) | HoloLens sensor acquisition, recording and CV samples | Optional Device Adapter / Research Reference |
+| [MixedRealityToolkit-Unity](https://github.com/sdk2035/MixedRealityToolkit-Unity) | Unity input, spatial interaction and UX components | Optional Engine Adapter / MRTK2 Compatibility Profile |
 | opentrack | Head tracking | Core Candidate / Tracking |
 | MAVMRF | Maritime monitoring | Domain Specialist |
 | Roboflow | CV workflow/platform | External / Optional |
@@ -302,6 +310,12 @@ OpenVR
 
 Device-specific plugins
 → optional adapters
+
+HoloLensForCV
+→ separate sensor/CV adapter; not an XR rendering runtime
+
+MRTK-Unity
+→ optional Unity interaction client over a validated XR provider
 ```
 
 ---
@@ -1106,6 +1120,8 @@ UnityARMLAdapter
 ```
 
 not as a platform dependency.
+
+The same boundary applies to MRTK-Unity: keep Unity scene objects, input services and platform plugins inside the client adapter. Exchange engine-neutral poses, anchors, interaction events and annotations with the spatial core. HoloLensForCV sensor access is a separate native/device concern; a bridge between it and MRTK is proposed in Sections 153–160.
 
 ---
 
@@ -2231,6 +2247,8 @@ spatial_skill:
 Core interfaces:
 
 ```text
+SensorFrameProvider
+SpatialInteractionProvider
 XRRuntimeProvider
 TrackingProvider
 CVProvider
@@ -2465,7 +2483,7 @@ jfxai4mar/
 ├── xr/
 │   ├── openxr/
 │   ├── openvr/
-│   └── device-adapters/
+│   └── device-adapters/         # proposed hololens-cv sensor bridge
 │
 ├── tracking/
 │   ├── vins/
@@ -2482,7 +2500,7 @@ jfxai4mar/
 │   ├── vsg/
 │   ├── blender/
 │   ├── x3d/
-│   └── adapters/
+│   └── adapters/                # proposed unity-mrtk client
 │
 ├── ai/
 │   ├── comfyui/
@@ -2551,6 +2569,8 @@ opentrack Adapter
 CVProvider
 ```
 
+Optional extension: implement a HoloLensForCV-backed `SensorFrameProvider`, starting with recorded data and explicit camera calibration/time synchronization. Keep the hardware adapter outside the portable CV core.
+
 ---
 
 # 135. MVP Phase 3 — Open 3D / XR
@@ -2563,6 +2583,8 @@ OpenXR Provider
 Blender asset pipeline
 glTF assets
 ```
+
+Optional extension: implement a Unity/MRTK2 `SpatialInteractionProvider` against the same scene, pose and event contracts. Evaluate MRTK3 as a separate migration profile; do not mix package generations without a validated migration.
 
 ---
 
@@ -2885,3 +2907,110 @@ AR/XR applications may process highly contextual data such as:
 Use data minimization, local processing where appropriate, explicit permissions, secure storage, retention policies and role-based access.
 
 For industrial, aviation, robotics, vehicle or safety-relevant use, XR overlays and AI recommendations are decision-support tools and must not replace certified safety systems, qualified engineering judgment or approved operating procedures.
+
+
+---
+
+# 153. HoloLensForCV and MRTK Integration Compendium
+
+This extension connects the existing sensor, perception, spatial-model, AI, digital-twin and XR layers to two explicitly requested frameworks. It preserves the open-source-first backbone in Section 7 and the provider separation in Section 120.
+
+| Framework | Verified source capabilities | Proposed JFXAI4MAR contribution | Boundary |
+|---|---|---|---|
+| [HoloLensForCV](https://github.com/sdk2035/HoloLensForCV) | C++/UWP components and samples for sensor access, streaming, recording, on-device OpenCV, desktop processing and batch processing | Device acquisition adapter, calibration-aware frame normalization and reproducible CV datasets | HoloLens/Windows-specific research path; sensor availability depends on the actual device and APIs |
+| [MixedRealityToolkit-Unity](https://github.com/sdk2035/MixedRealityToolkit-Unity) | Extensible Unity input and spatial UI framework, editor simulation and examples for hand, eye, speech and spatial-awareness interactions | Optional interaction client for annotations, twin visualization, procedure guidance and training | Requested README describes MRTK2; capabilities depend on device, Unity version and XR plugin |
+
+Both repositories contain MIT license files: [HoloLensForCV license](https://github.com/sdk2035/HoloLensForCV/blob/master/LICENSE) and [MRTK license](https://github.com/sdk2035/MixedRealityToolkit-Unity/blob/main/LICENSE.md). This does not make Unity, Windows, device firmware or every plugin an open-source dependency. Preserve notices and track dependency terms separately.
+
+**Evidence boundary:** the source READMEs were inspected for this documentation update. No device build, Unity import, sensor capture or end-to-end integration was executed. Pin exact source revisions during implementation; a fork name or README alone does not establish current maintenance or compatibility.
+
+# 154. Compatibility and Deployment Profiles
+
+| Profile | Intended use | Required validation |
+|---|---|---|
+| Portable open backbone | VSG/OpenCV/local AI, recorded or supported camera inputs | Chosen runtime implementation, camera drivers, coordinate transforms and model performance |
+| HoloLens CV research | Capture and process supported HoloLens sensor streams | Device generation, OS, Research Mode availability where required, permissions, CPU architecture and toolchain |
+| Unity/MRTK2 client | Reuse components and examples from the requested repository | Pin Unity, MRTK2 and XR plugin versions; verify supported input and deployment target |
+| MRTK3 migration candidate | Evaluate a newer interaction implementation separately | Follow the [MRTK3 repository](https://github.com/MixedRealityToolkit/MixedRealityToolkit-Unity); budget for API, input and scene migration |
+
+The HoloLensForCV README documents Visual Studio 2017 Update 3 and the Windows 10 SDK. Treat these as historical sample requirements to reproduce and assess, not proof of compatibility with a newer toolchain. Its metadata mentions HoloLens2ForCV while the body describes the older HoloLensForCV samples; verify actual code paths and device support before selecting a target.
+
+The MRTK README distinguishes legacy MRTK2 from MRTK3 and lists version-specific Unity/XR combinations. Preserve that distinction. Neither MRTK nor OpenXR alone guarantees access to raw tracking cameras or depth streams. The modular multicamera headset artwork is a concept and does not establish hardware availability, SDK compatibility or military certification.
+
+# 155. Proposed Integration Architecture
+
+```mermaid
+flowchart TD
+    H["HoloLensForCV adapter"] --> N["Frame normalization"]
+    R["Recorded or other camera inputs"] --> N
+    N --> P["OpenCV and perception"]
+    P --> S["Canonical spatial core"]
+    S <--> A["Local AI and RAG"]
+    S <--> T["Digital twin services"]
+    S <--> U["Unity and MRTK client"]
+    S <--> V["Open XR client"]
+    U --> E["Validated interaction events"]
+    V --> E
+    E --> S
+```
+
+HoloLensForCV supplies a device-side acquisition path; MRTK supplies application interaction. Implement their connection explicitly through canonical contracts. Prefer an out-of-process edge bridge for initial prototypes. A native UWP-to-Unity plugin is an alternative only after ABI, architecture, packaging and lifecycle compatibility are demonstrated.
+
+Use REST for configuration and assets, and authenticated WebSocket or another measured event transport for spatial updates. Select a separate bounded frame transport for high-bandwidth video. Keep AI inference and remote requests asynchronous so they do not block rendering. MCP remains a tool/workflow interface, not a camera or pose transport.
+
+# 156. Sensor and Interaction Contracts
+
+Add two proposed provider interfaces alongside the existing providers:
+
+| Interface | Proposed operations | Responsibility |
+|---|---|---|
+| `SensorFrameProvider` | `enumerate_streams`, `get_calibration`, `start`, `read_frame`, `stop`, `health` | Advertise actual sensor capabilities and produce timestamped frames |
+| `SpatialInteractionProvider` | `capabilities`, `subscribe_events`, `show_annotation`, `set_tracking_state`, `dispose` | Convert supported user inputs and display canonical spatial content |
+
+Each frame envelope should contain a schema version, device/session/stream IDs, sequence number, capture timestamp and clock domain, pixel format and dimensions, calibration ID, coordinate-frame ID, payload reference and tracking quality. Define camera intrinsics, distortion, extrinsics and calibration validity separately. Include pose-at-capture only when available, with its reference frame and quality.
+
+For multiple cameras, retain per-camera timestamps, expose synchronization uncertainty and identify paired frames explicitly. Never assume that simultaneous delivery means simultaneous exposure. Reject or mark incomplete bundles rather than silently combining stale imagery.
+
+Use meters, a documented right-handed canonical frame convention, explicit transform direction and `xyzw` quaternion ordering. Convert Unity's coordinate convention at the adapter boundary and verify with a known calibration target. Spatial UI events should carry session/user context, source modality, target object or anchor, timestamp and tracking quality. Confirmation is a distinct event from gaze or selection.
+
+# 157. Perception, AI and Spatial UX
+
+1. Discover supported streams and permissions; load the matching calibration.
+2. Acquire or replay frames; normalize clocks, formats and coordinate frames.
+3. Run the existing OpenCV/Kornia/CVProvider pipeline on the device or companion edge computer according to measured resources.
+4. Publish detections and pose/anchor updates with source, model version, uncertainty and freshness.
+5. Resolve the linked digital twin and retrieve approved procedure context through spatial RAG.
+6. Render annotations and task controls through the optional MRTK client or the portable XR client.
+7. Record deliberate user confirmation and minimal task evidence through the existing workflow layer.
+
+Use MRTK input simulation for interaction prototypes, then validate on physical hardware. Hand, eye, voice and spatial-mesh capabilities must be advertised by the target profile; provide controller, pointer or manual alternatives when unavailable. Hide precision overlays when tracking is lost or their underlying observations expire.
+
+# 158. AI Healthcare, Security and Defense Profiles
+
+| Domain | Proposed initial workflows | Evidence and operational boundary |
+|---|---|---|
+| Healthcare | Anatomy simulation, equipment identification, maintenance guidance and supervised procedure training | Use synthetic or appropriately authorized data; clinical use requires separate validation and qualified oversight |
+| Security | Facility inspection, emergency drills, asset-condition review and access-controlled incident documentation | Minimize recorded imagery and spatial maps; show observation age and uncertainty |
+| Defense | Maintenance training, logistics visualization, simulator exercises and search-and-rescue rehearsal | Human-supervised assistance; the concept does not claim combat readiness or certified protection |
+
+These profiles reuse the same acquisition, perception, twin and interaction contracts. Domain-specific deployment requirements belong in profile configuration and evaluation criteria, rather than hard-coded sensor or engine dependencies.
+
+# 159. Implementation Roadmap and Acceptance Evidence
+
+| Milestone | Deliverable | Acceptance evidence |
+|---|---|---|
+| 1. Source and capability baseline | Pinned revisions, license inventory, device/OS/SDK/Unity/plugin matrix | Reproducible sample build or a documented blocker for each selected profile |
+| 2. Offline replay | Recorded or synthetic input adapter and frame schema | Repeatable playback, valid calibration references, timestamp ordering and explicit missing-frame handling |
+| 3. Sensor bridge | HoloLensForCV-backed acquisition adapter | Enumerated available streams, permission handling, measured drop rate and disconnect recovery |
+| 4. Spatial client | Unity/MRTK2 scene with annotations and task confirmation | Correct coordinate conversion, capability fallback and tracking-loss behavior |
+| 5. AI/twin integration | Asynchronous perception, grounded procedure retrieval and twin overlays | Correct asset association, provenance, stale-data rejection and human confirmation |
+| 6. Multicamera evaluation | Synchronized capture experiment on supported hardware | Measured synchronization error, calibration quality, drift and reprojection error |
+| 7. Domain demonstration | One training or inspection scenario per selected domain | Task completion, usability feedback, retention controls and reproducible results |
+
+Set latency, synchronization, accuracy, thermal and battery thresholds before trials based on the chosen hardware and scenario. Report p50/p95 capture-to-overlay latency, frame loss, tracking recovery and resource use. The editor simulator is suitable for UX checks but does not validate physical sensors, optical alignment or hardware performance.
+
+Extend the proposed repository layout with `xr/device-adapters/hololens-cv/`, `scene/adapters/unity-mrtk/`, `docs/xr/compatibility.md` and replay/integration fixtures when implementation starts. These paths are planned artifacts, not existing components introduced by this README update.
+
+# 160. Integration Decision
+
+Adopt **HoloLensForCV as an optional sensor/CV research adapter** and **the requested MRTK-Unity repository as an optional MRTK2 interaction profile**. Keep the portable spatial core, local AI services and digital-twin contracts independent of both. Evaluate MRTK3 through an explicit migration track and validate the complete device/toolchain combination before claiming an operational integration.
